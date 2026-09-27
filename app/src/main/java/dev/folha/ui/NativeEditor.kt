@@ -21,7 +21,6 @@ class FolhaEditText(context: android.content.Context) : EditText(context) {
     var selectionChanged: ((Int, Int) -> Unit)? = null
     var shortcut: ((Int, Boolean) -> Boolean)? = null
     var updating = false
-    var displayedContent: String? = null
     override fun onSelectionChanged(start: Int, end: Int) {
         super.onSelectionChanged(start, end)
         if (!updating) selectionChanged?.invoke(start, end)
@@ -66,12 +65,17 @@ class FolhaEditText(context: android.content.Context) : EditText(context) {
             })
             hint = "Escreva alguma coisa…"
             contentDescription = "Editor de texto"
+            // Hydrate once per document/View instance. Never feed asynchronous Compose snapshots
+            // back into the live Editable: stale snapshots can erase fast IME/keyboard input.
+            updating = true
+            setText(document.content)
+            setSelection(document.selectionStart.coerceIn(0, length()), document.selectionEnd.coerceIn(0, length()))
+            updating = false
             selectionChanged = { start, end -> select(start, end) }
             this.shortcut = { key, shift -> shortcut(key, shift) }
             doAfterTextChanged {
                 if (!updating) {
                     val content = it.toString()
-                    displayedContent = content
                     edit(content, selectionStart, selectionEnd)
                 }
             }
@@ -84,13 +88,6 @@ class FolhaEditText(context: android.content.Context) : EditText(context) {
         view.setHintTextColor(colors.onSurfaceVariant.toArgb())
         view.highlightColor = colors.primary.copy(alpha = 0.30f).toArgb()
         if (android.os.Build.VERSION.SDK_INT >= 29) view.textCursorDrawable?.setTint(colors.primary.toArgb())
-        if (view.displayedContent != document.content) {
-            view.setText(document.content)
-            view.displayedContent = document.content
-        }
-        val start = document.selectionStart.coerceIn(0, view.length())
-        val end = document.selectionEnd.coerceIn(0, view.length())
-        if (view.selectionStart != start || view.selectionEnd != end) view.setSelection(start, end)
         view.updating = false
     })
 }

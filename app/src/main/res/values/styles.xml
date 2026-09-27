@@ -6,4 +6,11 @@
         <item name="android:windowActionModeOverlay">true</item>
         <item name="android:windowBackground">#FAF9F5</item>
     </style>
+    <style name="Theme.Folha.Dark" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:colorAccent">#B2CAA7</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">#0D100E</item>
+    </style>
 </resources>

@@ -25,8 +25,9 @@ fun sha256(bytes: ByteArray): String = MessageDigest.getInstance("SHA-256")
 
 fun documentName(input: String, extension: String): String {
     val clean = input.trim().replace(Regex("[\\p{Cntrl}/\\\\]"), "_").take(120)
+        .let { if (it.lastOrNull()?.isHighSurrogate() == true) it.dropLast(1) else it }
         .ifBlank { "Sem título" }
-    val stem = clean.replace(Regex("\\.(txt|md)$", RegexOption.IGNORE_CASE), "")
+    val stem = clean.replace(Regex("\\.(txt|md)$", RegexOption.IGNORE_CASE), "").ifBlank { "Sem título" }
     return "$stem.${if (extension == "md") "md" else "txt"}"
 }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <application android:allowBackup="false" android:dataExtractionRules="@xml/data_extraction_rules" android:label="Folha"
+    <application android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules" android:label="Folha"
         android:icon="@drawable/ic_folha" android:roundIcon="@drawable/ic_folha"
         android:supportsRtl="true" android:theme="@style/Theme.Folha">
         <activity android:name=".MainActivity" android:exported="true"

@@ -3,6 +3,7 @@ package dev.folha.editor
 import android.app.Application
 import android.content.Intent
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dev.folha.files.*
@@ -11,6 +12,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import java.io.File
 import java.nio.charset.CharacterCodingException
 import java.util.concurrent.atomic.AtomicLong
@@ -41,7 +43,7 @@ class EditorViewModel(application: Application) : AndroidViewModel(application) 
             val restored = runCatching { withContext(Dispatchers.IO) {
                 val recovered = drafts.read()
                 if (recovered != null && !recovered.isModified && recovered.uri != null) {
-                    try { files.read(Uri.parse(recovered.uri)).copy(id = recovered.id,
+                    try { files.read(recovered.uri.toUri()).copy(id = recovered.id,
                         selectionStart = recovered.selectionStart, selectionEnd = recovered.selectionEnd) }
                     catch (_: Exception) { refreshFailed = true; recovered.copy(canWrite = false) }
                 } else recovered
@@ -84,11 +86,22 @@ class EditorViewModel(application: Application) : AndroidViewModel(application) 
         _state.value = _state.value.copy(document = null, conflict = false)
         checkpoint()
     }
-    fun open(uri: Uri, flags: Int = 0) = operation {
-        val document = withContext(Dispatchers.IO) { files.persist(uri, flags); files.read(uri) }
+    fun open(uri: Uri, flags: Int = 0, importCopy: Boolean = false) = operation {
+        val document = withContext(Dispatchers.IO) {
+            if (!importCopy) files.persist(uri, flags)
+            val opened = files.read(uri)
+            if (importCopy) opened.copy(uri = null, savedContent = "", diskHash = null, canWrite = true) else opened
+        }
         _state.value = _state.value.copy(document = document, conflict = false)
         remember(document)
         checkpoint()
+    }
+    fun savePicked(expectedId: String?, uri: Uri, flags: Int, after: () -> Unit) {
+        viewModelScope.launch {
+            state.first { it.ready }
+            if (expectedId != null && _state.value.document?.id == expectedId) save(uri, flags, after = after)
+            else message("O documento mudou enquanto o seletor estava aberto. Seu texto foi mantido.")
+        }
     }
     fun save(uri: Uri? = null, flags: Int = 0, overwrite: Boolean = false, after: (() -> Unit)? = null) = operation {
         val document = _state.value.document ?: return@operation
@@ -132,6 +145,10 @@ class EditorViewModel(application: Application) : AndroidViewModel(application) 
         onReady(withContext(Dispatchers.IO) { files.share(document) })
     }
     private fun operation(block: suspend () -> Unit) {
+        if (!_state.value.ready) {
+            viewModelScope.launch { state.first { it.ready }; operation(block) }
+            return
+        }
         if (_state.value.busy) return
         _state.value = _state.value.copy(busy = true)
         viewModelScope.launch {

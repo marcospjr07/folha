@@ -14,6 +14,9 @@ class MainActivity : ComponentActivity() {
     private val model: EditorViewModel by viewModels()
     private val incoming = MutableStateFlow<Intent?>(null)
     override fun onCreate(savedInstanceState: Bundle?) {
+        val theme = dev.folha.preferences.Preferences(applicationContext).theme
+        val systemDark = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK == android.content.res.Configuration.UI_MODE_NIGHT_YES
+        setTheme(if (theme == dev.folha.preferences.ThemeMode.DARK || (theme == dev.folha.preferences.ThemeMode.SYSTEM && systemDark)) R.style.Theme_Folha_Dark else R.style.Theme_Folha)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         if (savedInstanceState == null && !model.incomingIntentConsumed) incoming.value = intent

@@ -33,6 +33,7 @@ object TextCodec {
         return Decoded(text, hasBom)
     }
     fun encode(text: String, hasBom: Boolean): ByteArray {
+        require('\u0000' !in text) { "O texto contém um caractere NUL. Remova-o antes de salvar como texto puro." }
         val buffer = Charsets.UTF_8.newEncoder().onMalformedInput(CodingErrorAction.REPORT)
             .onUnmappableCharacter(CodingErrorAction.REPORT).encode(java.nio.CharBuffer.wrap(text))
         val bytes = ByteArray(buffer.remaining()).also { buffer.get(it) }

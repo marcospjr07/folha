@@ -70,9 +70,8 @@ import kotlinx.coroutines.withContext
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val uri = data?.data
-            if (uri != null && pickerId == model.state.value.document?.id) {
-                model.save(uri, data.flags, after = { afterSave?.invoke(); afterSave = null })
-            } else model.message("O documento mudou enquanto o seletor estava aberto. Seu texto foi mantido.")
+            if (uri != null) model.savePicked(pickerId, uri, data.flags) { afterSave?.invoke(); afterSave = null }
+            else model.message("O seletor não retornou um destino. Seu texto foi mantido.")
         } else afterSave = null
         pickerId = null
     }
@@ -108,7 +107,7 @@ import kotlinx.coroutines.withContext
             val uri = if (item.action == Intent.ACTION_SEND) IntentCompat.getParcelableExtra(item, Intent.EXTRA_STREAM, Uri::class.java) else item.data
             val shared = item.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
             guard {
-                if (uri != null) model.open(uri, item.flags)
+                if (uri != null) model.open(uri, item.flags, importCopy = item.action == Intent.ACTION_SEND)
                 else if (shared != null && shared.length <= dev.folha.files.TextCodec.MAX_EDITOR_CHARS) model.newDocument(shared)
                 else model.message("Não foi possível abrir este conteúdo como texto.")
             }
@@ -131,7 +130,9 @@ import kotlinx.coroutines.withContext
     }
     FolhaTheme(state.theme) { dark ->
         SideEffect {
-            (context as? Activity)?.window?.let { window ->
+            (context as? Activity)?.let { activity ->
+                activity.setTheme(if (dark) dev.folha.R.style.Theme_Folha_Dark else dev.folha.R.style.Theme_Folha)
+                val window = activity.window
                 WindowCompat.getInsetsController(window, view).apply {
                     isAppearanceLightStatusBars = !dark
                     isAppearanceLightNavigationBars = !dark
@@ -164,7 +165,7 @@ import kotlinx.coroutines.withContext
                                 action("Salvar") { save() }()
                                 action("Salvar como…") { afterSave = null; saveAs = true }()
                                 action("Localizar") { search = !search }()
-                                action("Modo Foco") { search = false; focus = true; model.message("Modo Foco: toque em Sair do foco ou use Voltar.") }()
+                                action("Modo Foco") { search = false; focus = true; model.message("Modo Foco: use Voltar para sair. Com o teclado aberto, volte duas vezes.") }()
                                 action("Informações") { info = true }()
                                 action("Compartilhar") { model.share { context.startActivity(Intent.createChooser(it, "Compartilhar texto")) } }()
                                 HorizontalDivider()
@@ -204,9 +205,6 @@ import kotlinx.coroutines.withContext
                         }
                     }
                 } else {
-                    if (focus) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                        TextButton(onClick = { focus = false }) { Text("Sair do foco", style = MaterialTheme.typography.labelSmall) }
-                    }
                     if (search) {
                         Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically) {
                             OutlinedTextField(value = query, onValueChange = { query = it; searchResult = null }, label = { Text("Localizar texto") },
