@@ -1,0 +1,16 @@
+Folha 0.1.0 — validação em 2026-09-27
+AGP 9.4.0 / Gradle 9.8.0 / compileSdk e targetSdk 37 / Build Tools 36.0.0
+Comando: ./gradlew test lint assembleDebug connectedDebugAndroidTest
+Resultado: BUILD SUCCESSFUL in 2m 24s
+
+testDebugUnitTest: 14 testes, 0 falhas/erros
+testReleaseUnitTest: 14 testes, 0 falhas/erros
+Instrumentação API 29: 6 testes, 0 falhas/erros
+Lint: No issues found.
+APK: assinatura v2 verificada com apksigner; instalação no emulador aprovada.
+Logcat crash buffer vazio após os fluxos manuais.
+Aviso do Gradle: Configuration.setVisible(boolean) depreciado no plugin Android.
+
+APK: app/build/outputs/apk/debug/app-debug.apk
+SHA-256: 6456089fffeaa7079e84a922e66b81825a46934115c143423e13b167d7d1bd8d
+Tamanho: 11877935 bytes
