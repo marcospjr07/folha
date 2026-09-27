@@ -175,7 +175,7 @@ import kotlinx.coroutines.withContext
                             action("Tema") { themeDialog = true }()
                         }
                     },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
                 )
             },
         ) { padding ->
