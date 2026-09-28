@@ -23,6 +23,8 @@ class FolhaEditText(context: android.content.Context) : EditText(context) {
     var updating = false
     override fun onSelectionChanged(start: Int, end: Int) {
         super.onSelectionChanged(start, end)
+        // Search, hardware keys and selection handles must take precedence over an active fling.
+        (parent as? EditorViewport)?.stopFling()
         if (!updating) selectionChanged?.invoke(start, end)
     }
     override fun onKeyShortcut(keyCode: Int, event: KeyEvent): Boolean {
@@ -42,7 +44,7 @@ class FolhaEditText(context: android.content.Context) : EditText(context) {
     val limit by rememberUpdatedState(onLimit)
     val colors = MaterialTheme.colorScheme
     AndroidView(modifier = Modifier.fillMaxSize(), factory = { context ->
-        FolhaEditText(context).apply {
+        val editor = FolhaEditText(context).apply {
             id = android.view.View.generateViewId()
             // The ViewModel + durable recovery own the buffer, not the Activity's size-limited Bundle.
             isSaveEnabled = false
@@ -81,7 +83,9 @@ class FolhaEditText(context: android.content.Context) : EditText(context) {
             }
             onReady(this)
         }
-    }, update = { view ->
+        EditorViewport(context, editor)
+    }, update = { viewport ->
+        val view = viewport.editor
         view.updating = true
         view.isEnabled = enabled
         view.setTextColor(colors.onSurface.toArgb())

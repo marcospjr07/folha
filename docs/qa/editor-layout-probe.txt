@@ -1,0 +1,6 @@
+--------- beginning of main
+--------- beginning of system
+09-28 01:32:23.885  4203  4224 I FolhaLayoutProbe: run=0 mode=bounded bytes=2092500 editorHeight=960 viewportHeight=960 firstFrameMs=45269 drawMs=[14, 28, 11, 36, 89, 22, 21, 19, 26, 34, 7, 10] totalPssKb=126671 javaPssKb=29753 nativePssKb=18041
+09-28 01:33:29.788  4203  4224 I FolhaLayoutProbe: run=1 mode=wrap bytes=2092500 editorHeight=2295073 viewportHeight=960 firstFrameMs=53988 drawMs=[11312, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 9] totalPssKb=176593 javaPssKb=25375 nativePssKb=72418
+09-28 01:34:32.456  4203  4224 I FolhaLayoutProbe: run=2 mode=wrap bytes=2092500 editorHeight=2295073 viewportHeight=960 firstFrameMs=53853 drawMs=[11980, 0, 1, 1, 0, 0, 14, 1, 0, 0, 0, 0] totalPssKb=201524 javaPssKb=26551 nativePssKb=96138
+09-28 01:35:26.339  4203  4224 I FolhaLayoutProbe: run=3 mode=bounded bytes=2092500 editorHeight=960 viewportHeight=960 firstFrameMs=45938 drawMs=[6, 0, 7, 6, 5, 18, 12, 5, 5, 7, 8, 27] totalPssKb=120978 javaPssKb=25527 nativePssKb=16277

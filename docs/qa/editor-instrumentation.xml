@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="10" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-09-27T23:30:26" hostname="localhost">
+  <testsuite name="dev.folha.EditorGestureTest" tests="4" failures="0" errors="0" skipped="0" time="141.626" timestamp="2026-09-27T23:30:26" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="flingContinuesAfterReleaseAndNextTouchStopsIt" classname="dev.folha.EditorGestureTest" time="25.405" />
+    <testcase name="shortDocumentSwipeIsNotAnEditingTap" classname="dev.folha.EditorGestureTest" time="22.082" />
+    <testcase name="nearLimitDocumentScrollDoesNotEditBufferAndCaretCanBeRevealed" classname="dev.folha.EditorGestureTest" time="72.897" />
+    <testcase name="swipesDoNotOpenImeAndTapsReopenItAfterBack" classname="dev.folha.EditorGestureTest" time="21.242" />
+  </testsuite>
+  <testsuite name="dev.folha.EditorLifecycleTest" tests="1" failures="0" errors="0" skipped="0" time="53.702" timestamp="2026-09-27T23:30:26" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="nativeEditorUnicodeSelectionAndRecreation" classname="dev.folha.EditorLifecycleTest" time="53.702" />
+  </testsuite>
+  <testsuite name="dev.folha.FileSafetyTest" tests="4" failures="0" errors="0" skipped="0" time="2.964" timestamp="2026-09-27T23:30:26" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="saveAsBothExtensionsKeepsExactMarkdownAndUnicode" classname="dev.folha.FileSafetyTest" time="0.930" />
+    <testcase name="invalidUtf8AndOversizedEditsCannotTruncateFile" classname="dev.folha.FileSafetyTest" time="1.392" />
+    <testcase name="externalChangesAreNeverOverwritten" classname="dev.folha.FileSafetyTest" time="0.188" />
+    <testcase name="openEditSaveAndTruncateWithRealContentResolver" classname="dev.folha.FileSafetyTest" time="0.454" />
+  </testsuite>
+  <testsuite name="dev.folha.PickerRecoveryTest" tests="1" failures="0" errors="0" skipped="0" time="0.555" timestamp="2026-09-27T23:30:26" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="pickerResultBeforeRecoveryCompletesSavesTheMatchingBufferAndSendImportsCopy" classname="dev.folha.PickerRecoveryTest" time="0.555" />
+  </testsuite>
+</testsuites>
