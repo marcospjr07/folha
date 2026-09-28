@@ -4,7 +4,7 @@ Editor Android offline para `.txt` e `.md`. Uma tela de texto, uma barra discret
 
 ## Usar
 
-Android 8.0 (API 26) ou superior. Instale `app/build/outputs/apk/debug/app-debug.apk`.
+Android 8.0 (API 26) ou superior. Para instalar a versão pública, baixe o APK em [Releases](https://github.com/marcospjr07/folha/releases/latest). Para desenvolvimento local, gere `app/build/outputs/apk/debug/app-debug.apk` com `./gradlew assembleDebug`.
 
 - **Novo texto** abre um buffer local, sem escolher destino.
 - **Abrir arquivo** usa o seletor do Android. Selecione `.txt` ou `.md` em UTF-8.
