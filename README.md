@@ -91,4 +91,8 @@ Compose controla a interface. O `EditText` nativo usa `AndroidView` para seleç�
 
 Também no roadmap: configuração para iniciar em casa/último documento, tamanho/família da fonte e múltiplos rascunhos. O app atualmente recupera o último buffer automaticamente. Sem preview, substituir ou sincronização na v0.1.
 
+## Licença
+
+Distribuído sob a licença MIT. Veja [`LICENSE`](LICENSE).
+
 Referências: [compatibilidade do AGP](https://developer.android.com/build/releases/gradle-plugin), [Storage Access Framework](https://developer.android.com/training/data-storage/shared/documents-files), [Compose BOM](https://developer.android.com/develop/ui/compose/bom).
